@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="../lib/vue-2.4.0.js"></script>
+  <title>01_品牌列表案例</title>
+  <link rel="stylesheet" href="../lib/bootstrap-3.3.7.css">
+</head>
+
+<body>
+  <div id="app">
+    <!-- 头部 -->
+    <div class="panel panel-primary">
+      <!-- 添加品牌最顶层块 -->
+      <div class="panel-heading">
+        <h3 class="panel-title">添加品牌</h3>
+      </div>
+      <!-- 添加和查询块 -->
+      <div class="panel-body form-inline">
+        <!-- 添加块 -->
+        <label>
+          <!-- label::一般与<input>；连用 -->
+          Id:
+          <input type="text" v-model="id">
+        </label>
+        <label>
+          <!--为text文本框添加键盘监听事件-->
+          Name:
+          <!-- 按鍵修飾符 .enter .tab .delete .esc .space .up .down .left .rigth -->
+          <!-- 所有的键盘码都是可用的 -->
+          <input type="text" v-model="name" @keyup.enter="add">
+        </label>
+        <!-- 在Vue中，使用事件绑定机制，为元素指定处理
+            函数的时候，如果加了小括号，就可以给函数传参了 -->
+        <input type="button" value="添加" @click="add">
+        <!-- 搜索功能 -->
+        <label>
+          请输入品牌名称的关键字:
+          <!-- 双向数据绑定关键字 -->
+          <input type="text" v-model="keywords" v-focus>
+        </label>
+      </div>
+    </div>
+    <!-- 品牌信息展示块 -->
+    <div>
+      <!-- 信息头部 -->
+      <table class="table table-bordered table-hover table-striped">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Createtime</th>
+            <th>OPeration</th>
+          </tr>
+        </thead>
+
+        <!-- 表体 -->
+        <!-- 表格的数据跟着我们的框而改变。 -->
+        <!-- v-for::是一个指令 -->
+        <!-- 在search内部，通过执行 for循环，把所有符合搜索关键字的数据，保存到 一个新
+          的数组中，返回 -->
+        <tr v-for="item in search(keywords)" :key="item.id">
+          <td>{{item.id}}</td>
+          <td>{{item.name}}</td>
+          <td>{{item.Createtime | dateFormate('yyyy-mm-dd')}}</td>
+          <!-- 方法不要定义为delete ，占用了他的关键字了、 -->
+          <td> <a href="" @click="del(item.id)">删除</a></td>
+
+        </tr>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- vm1实例控制的实例 ::vm1也可以使用定义的全局过滤器-->
+
+  <div id="app1">
+    <h4>{{ dateNow | dateFormate}}</h4>
+  </div>
+
+  <script>
+    /* 定义一个全局的时间格式过滤器  ：：：：所有的vm实例都能够共享*/
+    /* es6新特性： 如果为null，赋值为‘’ */
+    Vue.filter('dateFormate', function (dateStr, pattern = "") {
+      /* 要接受变量，才能判断是什么类型的变量，才有代码提示 */
+      var dt = new Date(dateStr)
+
+      var y = dt.getFullYear()
+      var m = dt.getMonth() + 1
+      var d = dt.getDate()
+
+      /* 等于 “yyyy-mm-dd” */
+      /* `${里面是变量
+      }` */
+      /* toLowerCase() 方法用于把字符串转换为小写。 */
+      if (pattern.toLowerCase() === 'yyyy-mm-dd') {
+        return `${y}-${m}-${d}`
+      } else {
+        var hh = dt.getHours()
+        var mm = dt.getMinutes()
+        var ss = dt.getMilliseconds()
+
+        return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
+      }
+
+    })
+
+    /* 全局自定义键盘码 */
+    Vue.config.keyCodes.f2 = 113
+
+    // 自定义指令
+    //参数1： 指令的名称，定义时候不加v-，调用时候要加
+    //参数2：是一个对象，这个对象身上，有一些指令相关的函数，
+    Vue.directive('focus', {
+      bind: function(el) {
+        /* bind：在元素刚绑定指令的时候，-还没有插入到DOM中去，这时候，调用focus没有作用 
+        因为，一个元素只有插入到DOM之后，才能获得焦点*/
+        //每个函数中，第一个参数，都是el：被绑定指定的那个元素，这个el元素，是一个
+        //原生的JS对象，可以使用dom的方法
+        el.focus()
+      },
+      inserted: function(el) {
+        el.focus()
+      },
+    
+      updated: function() {}
+    })
+
+
+    /* 再定义一个vm实例 */
+
+    var vm1 = new Vue({
+      el: '#app1',
+      data: {
+        dateNow: new Date(),
+      },
+      methods: {
+
+      },
+      filters: {
+        /* 定义一个私有过滤器 {过滤器名称，处理函数}*/
+        /* 過濾器的調用：就近原則：私有》全局 */
+        /*    */
+        dateFormate: function (dateStr, pattern = '') {
+          var dt = new Date(dateStr)
+          var y = dt.getFullYear()
+          var m = dt.getMonth() + 1
+          var d = dt.getDate()
+
+          /* 等于 “yyyy-mm-dd” */
+          /* `${里面是变量
+          }` */
+          /* toLowerCase() 方法用于把字符串转换为小写。 */
+          if (pattern.toLowerCase() === 'yyyy-mm-dd') {
+            return `${y}-${m}-${d}`
+          } else {
+            /* 使用es6的string.padStar美化格式： */
+            var hh = dt.getHours().toString().padStart(2, '0')
+            var mm = dt.getMinutes().toString().padStart(2, '0')
+            var ss = dt.getSeconds().toString().padStart(2, '0')
+
+            return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
+          }
+        }
+      }
+
+    })
+
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        id: '',
+        name: '',
+        keywords: '',
+        list: [{
+            id: 1,
+            name: '奔驰',
+            Createtime: new Date()
+          },
+          {
+            id: 2,
+            name: '宝马',
+            Createtime: new Date()
+          }
+        ]
+      },
+      methods: {
+        add() {
+          /* 获取到输入的id和name；this.从data上面获取 */
+          /* 2.组织一个对象 */
+          /* 添加到list中， */
+          /* vue中，已经实现了数据的双向绑定，每当我们修改数据的时候
+          它都能监听到，自动把最新的数据更新到页面上面 */
+
+          var newCar = {
+            id: this.id,
+            name: this.name,
+            Createtime: new Date()
+          }
+          this.list.push(newCar)
+          /* 把输入框置为空的状态 */
+          this.id = this.name = ''
+        },
+        del(id) {
+          /* 1、根据id找到要删除这一项的索引
+             2、如果找到索引了，直接调用数组的splice方法 */
+          /* findIndex内部的回调函数 */
+          var index = this.list.findIndex(item => {
+            if (item.id == id) {
+              return true;
+            }
+          })
+          /* splice() 方法可删除从 index 处开始的零个或多个元素
+          ，并且用参数列表中声明的一个或多个值来替换那些被删除的元素。 */
+          this.list.splice(index, 1)
+          /* 还可以添加数据 */
+        },
+        /* 搜索功能 */
+        search(keywords) {
+          /* 对数组的每一项进行遍历匹配 */
+          // new a return list
+          /*  var newList = []
+           list.forEach(item =>{
+             if (item.name.indexOf(keywords) != -1){
+             //   item.indexOf('') 的返回值为0 ；只要不包含的时候才为-1
+               newList.push(item)
+             }
+           })
+           return newList */
+
+          /* tips： forEach some filter findIndex 这些都是数组的新方法 */
+          /* 都会对数组中的每一项，进行遍历，执行相关操作 */
+
+
+
+          // 注意 ： ES6中，为字符串提供了一个新方法，叫做  String.prototype.includes('要包含的字符串')
+          //  如果包含，则返回 true ，否则返回 false
+          // 选择所有包含 "is" 的 <p> 元素：$("p:contains(is)")
+          return this.list.filter(item => {
+            if (item.name.includes(keywords)) {
+              return item
+            }
+          })
+
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
+<!-- vue中所有的指令，调用时候都是v-开头 -->
+1、vue中自定义指令让文本框获得焦点
+--你仍然需要对普通 DOM 元素进行底层操作，这时候就会用到自定义指令。Vue推荐
+使用自定义指令来替代对DOM元素的底层操作。
+--bind：只调用一次，指令第一次绑定到元素时调用。在这里可以进行一次性的初始化设置。
+inserted：被绑定元素插入父节点时调用 (仅保证父节点存在，但不一定已被插入文档中)。
+update：所在组件的 VNode 更新时调用，但是可能发生在其子 VNode 更新之前。指令的值
+可能发生了改变，也可能没有。但是你可以通过比较更新前后的值来忽略不必要的模板更新

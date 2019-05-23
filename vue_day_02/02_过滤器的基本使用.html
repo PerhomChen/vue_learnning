@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="../lib/vue-2.4.0.js"></script>
+    <title>02_过滤器的基本使用</title>
+</head>
+<!-- 目的：过滤显示的时间格式 -->
+<!-- 过滤器只能在插值表达式和v-bind中使用 ;过滤器并不改变原来的东西-->
+
+<body>
+    <div id="app">
+      <!-- 原数据与过滤器之间通过管道进行通信 -->
+      <p>{{ msg | msgFormat('大家的','123') }}</p>
+    </div>
+    <script>
+      /* 可以接收来自msgFormat的参数 */
+      Vue.filter('msgFormat', function(msg, arg, arg1) {
+      /* 字符串的replace 方法，第一个参数，除了可以写一个 字符串之外，还可以定义
+      一个正则表达式 */
+      return msg.replace(/我的/g, arg+arg1)
+    })
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            msg: '我的靓靓靓'
+        },
+        methods: {   
+        }
+    })
+    
+    /* 过滤器的定义语法 */
+    /* Vue.filter('过滤器的名称' | function() {}) */
+    /* 过滤器中的 function ，第一个参数 ，已经被规定死了，永远都是 过滤器 管道符前面 
+    传递过来的数据 */
+    
+    </script>
+</body>
+</html>
