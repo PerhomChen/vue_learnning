@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="../lib/vue-2.4.0.js"></script>
+  <!-- 依赖于vue -->
+  <script src="../lib/vue-resource-1.3.4.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <input type="button" value="get" @click="getInfo">
+    <input type="button" value="post" @click="postInfo">
+    <input type="button" value="jsonp" @click="jsonpInfo">
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+
+      },
+      methods: {
+        getInfo() { // get 
+          //通过.then来设置成功的回调函数
+          this.$http.get('http://vue.studyit.io/api/getlunbo').then(function (result) {
+            console.log(result.body)
+          })
+        },
+        postInfo() {
+          /* 只支持表单格式，x-www-form-urlencoded */
+          /* 手动发起的post请求格式是 */
+          //通过post方法的第三个参数，{emulateJSON: true }设置提交表单未普通
+          //表单格式
+          this.$http.post('http://vue.studyit.io/api/post', {}, {
+            emulateJSON: true
+          }).then(function (result) {
+            console.log(result.body)
+          })
+        },
+        jsonpInfo() {
+          this.$http.jsonp('http://vue.studyit.io/api/jsonp').then(result => {
+            console.log(result.body)
+          })
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
