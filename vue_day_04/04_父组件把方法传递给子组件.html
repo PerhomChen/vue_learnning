@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="../lib/vue-2.4.0.js"></script>
+  <script src="../lib/vue-resource-1.3.4.js"></script>
+  <link rel="stylesheet" href="../lib/bootstrap-3.3.7.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <com2 @fun="show"></com2>
+  </div>
+  <template id="temp1">
+    <div>
+      <h1>这是子组件</h1>
+      <input type="button" value="接受父组件" @click="myclick">
+    </div>
+
+  </template>
+  <script>
+    var com2 = {
+      template: '#temp1',
+      data() {
+        return {
+          sonmsg: {
+            name: 'son',
+            age: 34
+          }
+        }
+      },
+      methods: {
+        myclick() {
+          //emit:触发，调用;
+          this.$emit('fun',this.sonmsg)
+        }
+      }
+    }
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        datamsgForSon: 'ok'
+      },
+      methods: {
+        show(data) {
+          console.log('调用了父组件身上的 show 方法: ---' + data)
+          this.datamsgForSon = data
+        }
+
+      },
+      filters: {
+
+      },
+      directvies: {
+
+      },
+      created() {
+
+      },
+      /* 子组件 */
+      components: {
+        com2
+      }
+    })
+  </script>
+</body>
+
+</html>
+
+子组件通过事件向父组件传递数据；
+父组件通过属性向子组件传递数据；

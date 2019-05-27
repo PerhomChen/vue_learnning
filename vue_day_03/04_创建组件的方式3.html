@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="../lib/vue-2.4.0.js"></script>
+    <script src="../lib/vue-resource-1.3.4.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap-3.3.7.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <mycom3></mycom3>
+        <login></login>
+    </div>
+    <template id="com3">
+      <div>
+          <h3>使用外部组件方式创建组件</h3>
+      </div>
+      
+    </template>
+    <template id="login">
+        <h3>这是私有组件</h3>
+    </template>
+    <script>
+      /* 全局组件：： */
+      Vue.component('mycom3', {
+        template: '#com3'
+      })
+        var vm = new Vue({
+            el: '#app',
+            data: {
+
+            },
+            methods: {
+                
+            },
+            components: {
+              login: {
+                template: '#login'
+              }
+            }
+        })
+    </script>
+</body>
+
+</html>

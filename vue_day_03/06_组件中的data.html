@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="../lib/vue-2.4.0.js"></script>
+  <script src="../lib/vue-resource-1.3.4.js"></script>
+  <link rel="stylesheet" href="../lib/bootstrap-3.3.7.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <count></count>
+    <hr>
+    <count></count>
+    <hr>
+    <count></count>
+  </div>
+  <template id="count1">
+    <div>
+      <input type="button" value="+1" @click="increment">
+      <p>{{ num }}</p>
+    </div>
+  </template>
+  <script>
+    Vue.component('count', {
+      template: '#count1',
+      data: function () {
+      return{
+        num: 0
+      } 
+      },
+      methods: {
+        increment() {
+          this.num++
+        }
+      }
+    })
+
+    var vm = new Vue({
+      el: '#app',
+      data: {
+
+      },
+      methods: {
+
+      },
+      filters: {
+
+      },
+      directvies: {
+
+      },
+      created() {
+
+      },
+      components: {
+
+      }
+    })
+  </script>
+</body>
+
+</html>

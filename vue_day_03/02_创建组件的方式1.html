@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="../lib/vue-2.4.0.js"></script>
+    <script src="../lib/vue-resource-1.3.4.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap-3.3.7.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <my-com1></my-com1>
+    </div>
+    <script>
+      //使用Vue.extend来创建全局的Vue组件。
+      var com1= Vue.extend({
+          //组件要展示的内容
+        template: '<h3>这是我创建的第一个组件！！</h3>'
+      })
+
+      //添加到component中
+      Vue.component('myCom1',com1)
+    
+        var vm = new Vue({
+            el: '#app',
+            data: {
+
+            },
+            methods: {
+                
+            },
+            
+        })
+    </script>
+</body>
+
+</html>
+
+组件：
+    为了拆分vue实例的代码量的，能够让我们以不同的组件，来划分不同
+    的功能模块，将来我盟要用什么样的功能，就可以去调用对应的组件即可。
+模块化：从代码逻辑划分的
+组件化：从UI界面划分的，方便UI组件的重用。
+
