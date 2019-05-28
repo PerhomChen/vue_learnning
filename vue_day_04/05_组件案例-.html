@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="../lib/vue-2.4.0.js"></script>
+  <script src="../lib/vue-resource-1.3.4.js"></script>
+  <link rel="stylesheet" href="../lib/bootstrap-3.3.7.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+
+    <comment @fun="loadcomments"></comment>
+    <ul class="list-group">
+      <li v-for="comment in comment_lists" :key="comment.id" class="list-group-item">
+        <span class="badge">评论人：{{comment.user}}</span>
+        {{comment.content}}
+      </li>
+    </ul>
+  </div>
+  <template id="temp1">
+    <div>
+
+      <div class="form-group">
+        <label>评论人：</label>
+        <input type="text" class="form-control" v-model="user">
+      </div>
+      <div class="form-group">
+        <label>评论内容：</label>
+        <input type="text" class="form-control" v-model="content">
+      </div>
+      <div class=" form-group">
+        <input type="button" value="发表评论" class="btn btn-primary" @click="sentComment">
+      </div>
+      
+    </div>
+  </template>
+  <script>
+    var comment = {
+      /* data必须是一个函数 */
+      data() {
+        return {
+          user: '',
+          content: ''
+        }
+      },
+      template: "#temp1",
+      methods: {
+        sentComment() {
+          //把子组件获取到的数据传到父组件中去
+          //存储到localStoreage中去
+          //把最新发表的评论对象存储到内存中区
+          //本地存储支持保存字符串类型，所以要使用JSON.stringify转换为字符串类型
+          //使用生命周期函数在加载data之前把localStore的数据读取出来。转换为一个数组
+          //1.create new object comment
+          var comment = {
+            id: Date.now(),
+            user: this.user,
+            content: this.content
+          }
+          //2、get data from localstore
+          var old_list = JSON.parse(localStorage.getItem('cmts') || '[]')
+          //3.unshift list
+          old_list.unshift(comment)
+          //4.save localstoreage
+          localStorage.setItem('cmts', JSON.stringify(old_list))
+          //clear text
+          this.user = this.content = ''
+          //调用父组件的loadcomment方法更新列表
+          this.$emit('fun')
+
+        }
+      }
+
+    }
+
+    var vm = new Vue({
+      el: '#app',
+      data: {
+
+        comment_lists: []
+      },
+      methods: {
+        loadcomments() {
+           /* 获取只能新建变量收 */
+        var temp_list = JSON.parse(localStorage.getItem('cmts') || '[]')
+        this.comment_lists = temp_list
+        }
+      },
+      filters: {
+
+      },
+      directvies: {
+
+      },
+      created() {
+       this.loadcomments()
+      },
+      components: {
+        comment
+      }
+    })
+  </script>
+</body>
+
+</html>

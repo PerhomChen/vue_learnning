@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="../lib/vue-2.4.0.js"></script>
+    <script src="../lib/vue-resource-1.3.4.js"></script>
+    <script src="../lib/vue-router-3.0.1.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap-3.3.7.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+      <p>{{ foo }}</p>
+      <!-- 这里的 `foo` 不会更新！ -->
+      <button v-on:click="foo = 'baz'">Change it</button>
+    </div>
+    <script>
+      var obj ={
+        foo: 'bar'
+      }
+      Object.freeze(obj)
+      /* vue可以通过$前缀来取自己的属性，与用户自定义的
+      属性区别开来 */
+        var vm = new Vue({
+          /* #是取id的 */
+            el: '#app',
+            data: 
+              obj
+            ,
+            methods: {
+
+            },
+            filters: {
+
+            },
+            directvies: {
+
+            },
+            created() {
+
+            },
+            components: {
+
+            }
+        })
+    </script>
+</body>
+
+</html>

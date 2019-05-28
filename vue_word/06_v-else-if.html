@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="../lib/vue-2.4.0.js"></script>
+    <script src="../lib/vue-resource-1.3.4.js"></script>
+    <script src="../lib/vue-router-3.0.1.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap-3.3.7.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+      <input type="text" v-model="type">
+      <div v-if="type === 'A'">
+        A
+      </div>
+      <div v-else-if="type === 'B'">
+        B
+      </div>
+      <div v-else-if="type === 'C'">
+        C
+      </div>
+      <div v-else>
+        Not A/B/C
+      </div>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+              type: ''
+            },
+            methods: {
+
+            },
+            filters: {
+
+            },
+            directvies: {
+
+            },
+            created() {
+
+            },
+            components: {
+
+            }
+        })
+    </script>
+</body>
+
+</html>
